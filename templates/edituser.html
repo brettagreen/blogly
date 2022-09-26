@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit user {{user.get_full_name()}} {% endblock %}
+
+{% block content %}
+
+<h2>Edit a user</h2>
+
+<form action="/users/{{user.id}}/edit" method="post">
+    <label for="firstName">First name</label>
+    <input type="text" name="firstName" placeholder="{{user.first_name}}"><br /><br />
+
+    <label for="lastName">Last name</label>
+    <input type="text" name="lastName" placeholder="{{user.last_name}}"><br /><br />
+
+    <label for="image">Image URL</label>
+    <input type="text" name="image" placeholder="Provide an image of this user"><br /><br />
+
+    <a href="/users/{{user.id}}"><button>Cancel</button></a>
+    <button type="submit">Save</button>
+
+    <input type="hidden" name="orig_firstName" value="{{user.first_name}}">
+    <input type="hidden" name="orig_lastName" value="{{user.last_name}}">
+    <input type="hidden" name="orig_image" value="{{user.image_url}}">
+</form>
+
+{% endblock %}
