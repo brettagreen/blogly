@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} HOME SWEET HOME {% endblock %}
+
+{% block content %}
+
+{% if posts %}
+
+{% for post in posts %}
+<h2>{{post.title}}</h2>
+<p>{{post.content}}</p>
+<h4>By {{post.usr.get_full_name()}} on {{post.created_at. strftime("%a %b %d %Y, %I:%M %p")}}</h4>
+{% endfor %}
+
+{% else %}
+<h2>NO POSTS YET</h2>
+{% endif %}
+
+<a href="/users">Look at all our users!</a>
+
+{% endblock %}

@@ -6,17 +6,34 @@
 
 <img src="{{user.image_url}}" size="200" height="200" width="200" alt="{{user.get_full_name()}} image">
 
-<h2>{{user.first_name}} {{user.last_name}}</h2>
+<h2>{{user.get_full_name()}}</h2>
 
 <div id="editButton">
     <form action="/users/{{user.id}}/edit" method="get">
-        <button type="submit">EDIT</button>
+        <button type="submit">Edit User</button><br /><br />
     </form>
 </div>
 
 <div id="deleteButton">
     <form action="/users/{{user.id}}/delete" method="post">
-        <button type="submit">DELETE</button>
+        <button type="submit">Delete User</button>
+    </form>
+</div>
+
+<div id="posts">
+    {% if posts|length > 0 %}
+    <h3>Yo dawg! Check out these posts!</h3>
+    {% endif %}
+    <ul>
+        {% for post in posts %}
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div id="postButton">
+    <form action="/users/{{user.id}}/posts/new" method="get">
+        <button type="submit">Add Post</button>
     </form>
 </div>
 
