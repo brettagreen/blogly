@@ -13,6 +13,17 @@
     <label for="content">Content</label>
     <textarea name="content" form="postform"></textarea><br /><br />
 
+    {% if tags|length > 0 %}
+    <ul style="list-style:none">
+    {% for tag in tags %}
+        <li>
+            <input style="vertical-align:middle" type="checkbox" value="{{tag.id}}" name="checktags">
+            <label for="{{tag.id}}">{{tag.name}}</label>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
     <button type="submit">Add</button>
 </form>
 

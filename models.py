@@ -1,10 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-
 def connect_db(app):
     """Connect to database."""
-
     db.app = app
     db.init_app(app)
 
@@ -20,7 +18,6 @@ class User(db.Model):
                      unique=False)
     last_name = db.Column(db.String(30), nullable=False)
     image_url = db.Column(db.String, default='https://webstockreview.net/images/clown-clipart-emoji.jpg')
-    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
@@ -81,3 +78,37 @@ class Post(db.Model):
     @classmethod
     def get_user_posts(cls, user):
         return cls.query.filter_by(user_id=user.id).all()
+
+class Tag(db.Model):
+    """TAG"""
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+    posts = db.relationship('Post',
+                                secondary='post_tags',
+                                backref='tags')
+
+    @classmethod
+    def return_all_tags(cls):
+        return cls.query.all()
+
+    @classmethod
+    def get_specific_tag(cls, id):
+        return cls.query.get(id)
+
+    @classmethod
+    def create_new_tag(cls, name):
+        return Tag(name=name)
+
+    @classmethod
+    def delete_tag(cls, id):
+        cls.query.filter_by(id=id).delete()
+
+class PostTag(db.Model):
+    """POSTTAG"""
+    __tablename__ = "post_tags"
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True)

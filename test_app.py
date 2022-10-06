@@ -1,6 +1,6 @@
 from app import app
 from unittest import TestCase
-from models import User, Post, db, connect_db
+from models import User, Post, Tag, db, connect_db
 from jinja2.exceptions import UndefinedError
 from sqlalchemy.exc import DataError
 import datetime
@@ -22,6 +22,12 @@ class BloglyTestCase(TestCase):
         with app.test_client() as client:
             resp = client.get('/')
             self.assertEqual(resp.status_code, 200)
+
+    def test_bad_route(self):
+        with app.test_client() as client:
+            resp = client.get('/donkeys/zebras/turtles/ohmy')
+            html = resp.get_data(as_text=True)
+            self.assertIn('<h1>Page Not Found!!!</h1>', html)
     
     def test_new_user_form(self):
         with app.test_client() as client:
@@ -119,11 +125,18 @@ class BloglyTestCase(TestCase):
             self.assertIn('<h2>oopsie!</h2>', html)
             self.assertIn('<h3>fish larva are nature&#39;s candy</h3>', html)
 
-    def test_delete_post(self):
+    def test_all_tags(self):
         with app.test_client() as client:
-            user = User(first_name='ron', last_name='basic', image_url='')
-            db.session.add(user)
-            db.session.commit() 
-            post = Post(title="another post", content="let's talk about mine safety", created_at=datetime.datetime.now(), user_id=user.id)
-            db.session.add(post)
-            db.session.commit() 
+            tag = Tag(name="funkymoves")
+            db.session.add(tag)
+            db.session.commit()
+
+            resp = client.get('/tags')
+            html = resp.get_data(as_text=True)
+            self.assertIn('funkymoves</a></li>', html)
+
+    def test_add_tag(self):
+        with app.test_client() as client:
+            resp = client.get('/tags/new')
+            html = resp.get_data(as_text=True)
+            self.assertIn('<form id="postform" action="/tags/new" method="post">', html)

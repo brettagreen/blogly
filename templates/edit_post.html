@@ -13,11 +13,24 @@
     <label for="content">Content</label>
     <input type="textarea" name="content" placeholder="{{post.content}}"><br /><br />
 
+    {% if tags|length > 0 %}
+    {% for tag in tags %}
+    {% if tag in post.tags %}
+    <input type="checkbox" name="post_tags" value="{{tag.id}}" checked>
+    <label for="{{tag.id}}">{{tag.name}}</label>
+    {% else %}
+    <input type="checkbox" name="post_tags" value="{{tag.id}}">
+    <label for="{{tag.id}}">{{tag.name}}</label>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
     <a href="/users/{{user_id}}"><button>Cancel</button></a>
     <button type="submit">Save</button>
 
     <input type="hidden" name="orig_title" value="{{post.title}}">
     <input type="hidden" name="orig_content" value="{{post.content}}">
+    
 </form>
 
 {% endblock %}

@@ -8,6 +8,16 @@
 
 <h3>{{post.content}}</h3>
 
+<p><i>By {{post.usr.get_full_name()}} on {{post.created_at. strftime("%a %b %d %Y, %I:%M %p")}}</i></p>
+
+<p><b>Tags:</b>
+{% if post.tags|length > 0 %}
+{% for tag in post.tags %}
+<a href="/tags/{{tag.id}}">{{tag.name}}</a>&nbsp;
+{% endfor %}
+{% endif %}
+</p>
+
 <div id="editButton">
     <form action="/posts/{{post.id}}/edit" method="get">
         <button type="submit">EDIT</button>
