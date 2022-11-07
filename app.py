@@ -84,7 +84,8 @@ def process_edit_user_form(id):
 
 @app.route('/users/<int:id>/delete', methods=['POST'])
 def delete_user(id):
-    User.delete_user(id)
+    user = User.query.get(id)
+    db.session.delete(user)
     db.session.commit()
     return redirect('/users')
 
